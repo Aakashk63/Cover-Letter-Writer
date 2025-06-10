@@ -1,5 +1,20 @@
-streamlit
-python-dotenv
-pdfplumber
-python-docx
-google-generativeai
+# Streamlit itself
+streamlit>=1.32.0
+
+# Env loading
+python-dotenv>=1.0.1
+
+# PDF handling
+pdfplumber>=0.10.3
+pdf2image>=1.16.3
+Pillow>=10.0.0
+PyPDF2>=3.0.1
+
+# DOCX handling
+python-docx>=0.8.11
+
+# Google Generative AI (this is the key one causing your error!)
+google-generativeai>=0.4.0
+
+# Extra dependencies (commonly needed to avoid font/image errors with pdfplumber)
+reportlab>=4.0.8
