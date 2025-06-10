@@ -1,23 +1,5 @@
-# Core App
-streamlit==1.35.0
-
-# Google Gemini API
-google-generativeai==0.5.2
-google-auth==2.29.0
-google-api-core==2.17.1
-protobuf==4.25.3
-
-# For environment variables
-python-dotenv==1.0.1
-
-# For PDF processing
-pdfplumber==0.10.3
-pdf2image==1.17.0
-
-# For DOCX
-python-docx==1.1.0
-
-# Additional dependencies
-Pillow==10.2.0
-reportlab==4.0.8
-PyMuPDF==1.24.0
+streamlit
+python-dotenv
+pdfplumber
+python-docx
+google-generativeai
