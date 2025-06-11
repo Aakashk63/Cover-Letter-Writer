@@ -1,142 +1,31 @@
 {
-  "name": "4",
+  "name": "5",
   "nodes": [
     {
-      "parameters": {
-        "pollTimes": {
-          "item": [
-            {
-              "mode": "everyMinute"
-            }
-          ]
-        },
-        "documentId": {
-          "__rl": true,
-          "value": "1eXMEyYUaB61JJfCdNzoPEo1EhSwhZNiekm7ixhKPNOI",
-          "mode": "list",
-          "cachedResultName": "task",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eXMEyYUaB61JJfCdNzoPEo1EhSwhZNiekm7ixhKPNOI/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1897261129,
-          "mode": "list",
-          "cachedResultName": "Form Responses 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eXMEyYUaB61JJfCdNzoPEo1EhSwhZNiekm7ixhKPNOI/edit#gid=1897261129"
-        },
-        "event": "rowAdded",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -460,
-        80
-      ],
-      "id": "875e76ce-975f-479a-a7e1-dbd44354a87c",
-      "name": "Google Sheets Trigger"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f5a1966f-c670-4b01-b5fb-4d44c7d83428",
-              "leftValue": "={{ $json.status }}",
-              "rightValue": "completed",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -240,
-        80
-      ],
-      "id": "03d2f0c5-e616-47ea-a2b7-08c8e1f52db5",
-      "name": "If"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Context:\nYou are an AI assistant that generates formal daily update emails for Scrum Masters. The email should inform them that certain employees have completed their assigned tasks.\n\nInputs Provided:\n\nName: {{ $json.name }}\n\nTask: {{ $json.task }}\nInstructions:\n\nCompose a concise, professional email to the Scrum Master.\n\nMention the employee's name and the task they completed.\n\nUse a formal yet positive tone.\n\nThe email should be in paragraph format (not bullet points).\n\nAdd a subject line like: Task Completion Update ",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
-        -20,
-        -20
-      ],
-      "id": "1423b60e-53b5-450c-99d8-bbcd144a3ca5",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash-001",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        20,
-        180
-      ],
-      "id": "8cb16cf2-bcd5-4c16-9a17-76843bdefe90",
-      "name": "Google Gemini Chat Model"
-    },
-    {
-      "parameters": {
-        "sendTo": "akaakashsvg63@gmail.com",
-        "subject": "update",
-        "emailType": "text",
-        "message": "={{ $json.output }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        400,
+        0,
         0
       ],
-      "id": "20ff5e8e-cc19-4cd6-a80c-0a659d03bb55",
-      "name": "Gmail",
-      "webhookId": "b171d999-1d97-44ca-a266-3c4797ef8e4b",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
-          "name": "Gmail account"
-        }
-      }
+      "id": "ff45f247-5a0c-4cc0-9983-ba84b2437469",
+      "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Context:\nYou are an AI assistant responsible for drafting formal reminder emails to Scrum Masters. The purpose of this email is to notify scrum master that specific employees have not yet completed their assigned tasks \n\nInputs Provided:\n\nName: {{ $json.name }}\n\nTask: {{ $json.task }}\n\nInstructions:\n\nGenerate a polite and professional email.\n\nClearly state the employee's name and the task that is still pending.\n\nPolitely suggest reminding the employee to complete the task at the earliest.\n\nUse a formal and respectful tone.\n\nEmail format should include a subject line like: Pending Task Reminder - [Employee Name] ",
+        "text": "=Youre an ai agent youre role is to get the due unpaid detail with include daysoverdue,Amount,Due Amount,EmailID and Client Name\n\nHere is the data {{ $json.markdown }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -20,
-        320
+        660,
+        0
       ],
-      "id": "e80e8289-75a2-4705-9f67-c43a1a0c20f0",
-      "name": "AI Agent1"
+      "id": "630c8267-f9b1-4ca5-b119-6dc1bc58a139",
+      "name": "AI Agent"
     },
     {
       "parameters": {
@@ -146,44 +35,110 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        20,
-        540
+        580,
+        220
       ],
-      "id": "8a6233c0-ab75-4158-8322-939265e1fda6",
-      "name": "Google Gemini Chat Model1",
+      "id": "5c09b5e7-dcbc-40e9-b723-6a49825943fd",
+      "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
           "id": "XC6XiAxMYWlPVTpR",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "39ab3eea-b1fd-47dd-8d70-a3a77a30d72f",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "0lT9mQW83ZU71ltb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst headers = Object.keys(items[0].json);\nconst headerRow = `| ${headers.join(' | ')} |`;\nconst separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;\n\nconst dataRows = items.map(item => {\n  return `| ${headers.map(h => item.json[h]).join(' | ')} |`;\n});\n\nconst markdownTable = [headerRow, separatorRow, ...dataRows].join('\\n');\n\nreturn [{ json: { markdown: markdownTable } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        380,
+        0
+      ],
+      "id": "86649561-7186-48ad-8981-7e4193a1a6c5",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"EmailID\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n      \"Client Name\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n\t\t\"Due Amount\": {\n\t\t\t\"type\": \"array\",\n\t\t\t\"Days Overdue\": {\n\t\t\t\t\"type\": \"arrray\"\n\t\t\t}\n\t\t}\n\t}\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.1,
+      "position": [
+        1020,
+        0
+      ],
+      "id": "2ed513d1-7664-4c2c-bfb5-18b62837ee32",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.output.EmailID[0] }}",
+        "subject": "=Payment Reminder – Overdue Invoices ",
+        "emailType": "text",
+        "message": "=Dear [{{ $json.output['Client Name'] }}],  I hope you are doing well.  This is a kind reminder that the following invoices from our records are overdue for payment as of June 11, 2025. We request your prompt attention to settle the outstanding amounts to avoid any interruptions in service or late fees.\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1380,
+        0
+      ],
+      "id": "85e6429f-96b5-447d-bd09-e8f2213c4256",
+      "name": "Gmail",
+      "webhookId": "fbaa6cbe-b498-4056-bbb4-ada69478dd9a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6EipYDoa9oh6SUqc",
+          "name": "Gmail account"
+        }
+      }
     }
   ],
   "pinData": {},
   "connections": {
-    "Google Sheets Trigger": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "AI Agent1",
+            "node": "Google Sheets",
             "type": "main",
             "index": 0
           }
@@ -197,6 +152,33 @@
             "node": "AI Agent",
             "type": "ai_languageModel",
             "index": 0
+          },
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -205,30 +187,19 @@
       "main": [
         [
           {
-            "node": "Gmail",
+            "node": "Information Extractor",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent1": {
+    "Information Extractor": {
       "main": [
         [
           {
             "node": "Gmail",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent1",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -239,10 +210,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c35716b1-7f20-4482-bedd-1818135f8120",
+  "versionId": "abc2a377-7b8d-4f89-8328-093f17c567a9",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "b2e847aea1afbad20bc986fdcca4d73233c1a19e7b9e6c4bff5fd7fc4c14840c"
   },
-  "id": "G0GuGSAKdQgkw7gq",
+  "id": "PLDEYBAifRZKwzGO",
   "tags": []
 }
