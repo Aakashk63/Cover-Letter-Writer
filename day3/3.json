@@ -1,5 +1,5 @@
 {
-  "name": "3",
+  "name": "Smart Daily report",
   "nodes": [
     {
       "parameters": {
@@ -39,10 +39,10 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        -1080,
-        20
+        -520,
+        0
       ],
-      "id": "9e894e1b-f5f3-456d-a131-850085b6325c",
+      "id": "93c93339-af66-474b-a27a-bea967af5be5",
       "name": "On form submission",
       "webhookId": "bb8e01ce-4a7d-4a54-b8ff-5687fbc85b10"
     },
@@ -55,10 +55,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        -440,
-        -60
+        120,
+        -80
       ],
-      "id": "25350f84-bed9-40cd-93e6-1822bbdbf511",
+      "id": "ff7566ce-a4e2-4ded-85a6-07f5bdabaf36",
       "name": "AI Agent"
     },
     {
@@ -69,14 +69,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -640,
-        220
+        -80,
+        200
       ],
-      "id": "1a10dfc3-d753-483d-85ea-e17c04264fba",
+      "id": "33d199f7-65e9-4714-8ea7-f164f2b89e0f",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "XC6XiAxMYWlPVTpR",
+          "id": "3sZ60ITqALIjg7kB",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -88,10 +88,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -860,
-        20
+        -300,
+        0
       ],
-      "id": "89b89c86-e7d4-4ab4-bd35-77a1d41315b4",
+      "id": "601bb9f3-1656-462d-aec8-d021775ba17e",
       "name": "Code"
     },
     {
@@ -105,15 +105,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        -80,
-        -60
+        480,
+        -80
       ],
-      "id": "0158210d-3dee-46ab-8465-56ddd800bcf4",
+      "id": "aa33d8b6-daf6-4f47-b09b-c21a38d4c680",
       "name": "Gmail",
       "webhookId": "73c040c2-4d97-454d-be30-ddb3dca954b1",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
+          "id": "YT6io3ksIQHyc3Kk",
           "name": "Gmail account"
         }
       }
@@ -170,11 +170,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "1a0973c2-9728-4d5c-9ae4-c7dfced63622",
+  "versionId": "38e89ae9-e60c-4520-9c27-b3dab9b3a973",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "b2e847aea1afbad20bc986fdcca4d73233c1a19e7b9e6c4bff5fd7fc4c14840c"
+    "instanceId": "fbac13493fa75c21e317fd0450e260009adc7e93d95112502ca2ddd0cbc86493"
   },
-  "id": "pXWOog6csq2uELZO",
+  "id": "XhEc9fXhYW9iGru7",
   "tags": []
 }
