@@ -1,5 +1,5 @@
 {
-  "name": "2",
+  "name": "Daily standup 2",
   "nodes": [
     {
       "parameters": {
@@ -41,10 +41,10 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        0,
-        0
+        -1200,
+        280
       ],
-      "id": "19c0a1e6-9c32-40c0-b6cd-c4624b89d33d",
+      "id": "efacf95d-6007-48c2-a62f-a46acc1aefbe",
       "name": "On form submission",
       "webhookId": "7b73e77d-82ad-45a8-ba95-1329b48a1fe9"
     },
@@ -121,17 +121,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        220,
-        0
+        -980,
+        280
       ],
-      "id": "8ddca3db-c9fd-4982-aac9-464ad25a414e",
-      "name": "Google Sheets",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "0lT9mQW83ZU71ltb",
-          "name": "Google Sheets account"
-        }
-      }
+      "id": "e8f8888d-ee35-4099-93ab-72fa020a630d",
+      "name": "Google Sheets"
     },
     {
       "parameters": {
@@ -142,10 +136,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        440,
-        0
+        -760,
+        280
       ],
-      "id": "900a792d-3e85-4317-afc2-dd9f242db8db",
+      "id": "3f319322-4400-4e65-ad85-4b3d947c27db",
       "name": "AI Agent"
     },
     {
@@ -156,17 +150,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        480,
-        220
+        -720,
+        500
       ],
-      "id": "34b10f2b-c3d5-4fba-9141-7f04a36d306a",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "XC6XiAxMYWlPVTpR",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "id": "e733c9ca-1938-4614-9d41-21cff075fe0f",
+      "name": "Google Gemini Chat Model"
     },
     {
       "parameters": {
@@ -178,10 +166,10 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.1,
       "position": [
-        800,
-        0
+        -400,
+        280
       ],
-      "id": "068c89d8-b351-4f97-9063-7aa24481551a",
+      "id": "28a3a789-e513-462e-83d2-978d8e3e92cd",
       "name": "Information Extractor"
     },
     {
@@ -192,17 +180,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        900,
-        220
+        -300,
+        500
       ],
-      "id": "601b3c72-e485-4213-9b52-3cf19d6121e1",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "XC6XiAxMYWlPVTpR",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "id": "70efd8cb-3787-4206-a1e2-db515b918580",
+      "name": "Google Gemini Chat Model1"
     },
     {
       "parameters": {
@@ -231,10 +213,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1160,
-        0
+        -40,
+        280
       ],
-      "id": "25db766d-32bc-4654-83f1-6e6ae4a211ff",
+      "id": "10477ecf-0f05-4674-9e61-14662f9318df",
       "name": "If"
     },
     {
@@ -248,18 +230,12 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1380,
-        -100
+        180,
+        180
       ],
-      "id": "8701f33c-443d-4dc1-9f04-4eb32d778b45",
+      "id": "5ecab1db-9dee-4afe-9fa6-c53011c74a9d",
       "name": "Urgency Mail",
-      "webhookId": "afe92d10-729b-41bc-b4b5-a65f0226efb1",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
-          "name": "Gmail account"
-        }
-      }
+      "webhookId": "afe92d10-729b-41bc-b4b5-a65f0226efb1"
     },
     {
       "parameters": {
@@ -272,18 +248,12 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1380,
-        100
+        180,
+        380
       ],
-      "id": "2c9bea9b-8329-4072-a2fa-86dd31895969",
+      "id": "bf617f25-0286-4d23-a26e-7b0129595738",
       "name": "Gmail",
-      "webhookId": "196a0a6f-5225-4182-83fa-4a1caa52e482",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
-          "name": "Gmail account"
-        }
-      }
+      "webhookId": "196a0a6f-5225-4182-83fa-4a1caa52e482"
     }
   ],
   "pinData": {},
@@ -377,11 +347,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "3a5a7cc0-1ecd-4213-bc26-181990aed529",
+  "versionId": "7a213f6a-7882-4eb9-a6ea-21e1aa71f8af",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "b2e847aea1afbad20bc986fdcca4d73233c1a19e7b9e6c4bff5fd7fc4c14840c"
+    "instanceId": "fbac13493fa75c21e317fd0450e260009adc7e93d95112502ca2ddd0cbc86493"
   },
-  "id": "XeJ8HpkKRLgyUuPO",
+  "id": "XhEc9fXhYW9iGru7",
   "tags": []
 }
