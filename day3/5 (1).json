@@ -1,82 +1,30 @@
 {
-  "name": "5",
+  "name": "invoice",
   "nodes": [
     {
-      "parameters": {
-        "formTitle": "Post-Meeting Action Submission",
-        "formDescription": "Please submit a summary of the meeting you attended. Be sure to include any action items discussed, who is responsible for each task, and the expected deadlines. This helps keep everyone aligned and accountable.",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "Name"
-            },
-            {
-              "fieldLabel": "Meeting Title"
-            },
-            {
-              "fieldLabel": "Team/Department ",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Development"
-                  },
-                  {
-                    "option": "Marketing"
-                  },
-                  {
-                    "option": "Designer"
-                  }
-                ]
-              }
-            },
-            {
-              "fieldLabel": "Action What to do?"
-            },
-            {
-              "fieldLabel": "Assigned To",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "akaakashsvg63@gmail.com   Designer"
-                  },
-                  {
-                    "option": "samplemail@gmail.com  Development"
-                  },
-                  {
-                    "option": "=tempmail@gmail.com  Marketing "
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.2,
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
       "position": [
-        0,
-        0
+        -240,
+        120
       ],
-      "id": "1af71f98-b73f-4df6-8c30-15a678bc6fe0",
-      "name": "On form submission",
-      "webhookId": "b010c4df-14f9-4306-bb85-bb8959dda094"
+      "id": "9687f6bd-1f8d-41c1-8a0a-d0d2c3fa6a3f",
+      "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You're a task assigner Youre Role to Remind their Task which was mentioned on the Last mail \n\noutput \nthis task was assigned by teamLead \nMeeting title :{{ $json['Meeting Title'] }}\nyour task :{{ $json['Action What to do?'] }}\nassigned to :{{ $json['Assigned To'] }}\nteam/development : {{ $json['Team/Department '] }}",
+        "text": "=Youre an ai agent youre role is to get the due unpaid detail with include daysoverdue,Amount,Due Amount,EmailID and Client Name\n\nHere is the data {{ $json.markdown }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
       "position": [
-        220,
-        0
+        420,
+        120
       ],
-      "id": "bc2f52a7-e2ad-4273-ba1c-30207b53d5aa",
+      "id": "c1ab4c50-ec86-4863-8da3-755268bdfe94",
       "name": "AI Agent"
     },
     {
@@ -87,66 +35,92 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        420,
-        240
+        340,
+        340
       ],
-      "id": "5cafa0cf-1edc-4e7f-b501-665fdf6ab0ef",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "XC6XiAxMYWlPVTpR",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "id": "af1f899a-6e77-41cc-8c99-212bdf6f8a94",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -20,
+        120
+      ],
+      "id": "da9843e7-1d80-4633-98ef-89abcc65658a",
+      "name": "Google Sheets"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst headers = Object.keys(items[0].json);\nconst headerRow = `| ${headers.join(' | ')} |`;\nconst separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;\n\nconst dataRows = items.map(item => {\n  return `| ${headers.map(h => item.json[h]).join(' | ')} |`;\n});\n\nconst markdownTable = [headerRow, separatorRow, ...dataRows].join('\\n');\n\nreturn [{ json: { markdown: markdownTable } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        120
+      ],
+      "id": "7da9e4d1-5be6-42f9-bdba-210a4f9c937c",
+      "name": "Code"
     },
     {
       "parameters": {
         "text": "={{ $json.output }}",
         "schemaType": "manual",
-        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"Team/Developmen\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n      \"Task\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n\t\t\"Assigned To\": {\n\t\t\t\"type\": \"array\",\n\t\t\t\"Task\": {\n\t\t\t\t\"type\": \"array\"\n\t\t\t}\n\t\t}\n\t}\n}",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"EmailID\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n      \"Client Name\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n\t\t\"Due Amount\": {\n\t\t\t\"type\": \"array\",\n\t\t\t\"Days Overdue\": {\n\t\t\t\t\"type\": \"arrray\"\n\t\t\t}\n\t\t}\n\t}\n}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.1,
       "position": [
-        580,
-        0
+        780,
+        120
       ],
-      "id": "6fd9bc10-19c2-49ce-aa62-68ddfa287b01",
+      "id": "49f26ebd-e785-4e25-9d56-f16e5edb72b6",
       "name": "Information Extractor"
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.output['Assigned To'][0] }}",
-        "subject": "⏰ Task Reminder: Action Item Pending from Recent Meeting",
+        "sendTo": "={{ $json.output.EmailID[0] }}",
+        "subject": "=Payment Reminder – Overdue Invoices ",
         "emailType": "text",
-        "message": "=Kindly ensure that the task is completed on time. If you've already completed it, please ignore this message or update the project tracker accordingly. \nHere is Your Task {{ $json.output.Task[0] }}\nWhich is assigned by Your Team Leader\nIf you need assistance or foresee any delays, feel free to reach out.  Thanks for your commitment and contribution!  Best regards, Project Coordinator [Your Company Name]",
+        "message": "=Dear [{{ $json.output['Client Name'] }}],  I hope you are doing well.  This is a kind reminder that the following invoices from our records are overdue for payment as of June 11, 2025. We request your prompt attention to settle the outstanding amounts to avoid any interruptions in service or late fees.\n",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        940,
-        0
+        1140,
+        120
       ],
-      "id": "97ffddfb-36bc-4fd3-8a57-fae077bfd278",
+      "id": "d569e474-fcbd-4de5-9e01-f99924b0a2ee",
       "name": "Gmail",
-      "webhookId": "0481e8da-d7c0-4fa6-beda-557ce42ca046",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
-          "name": "Gmail account"
-        }
-      }
+      "webhookId": "fbaa6cbe-b498-4056-bbb4-ada69478dd9a"
     }
   ],
   "pinData": {},
   "connections": {
-    "On form submission": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Google Sheets",
             "type": "main",
             "index": 0
           }
@@ -164,6 +138,28 @@
           {
             "node": "Information Extractor",
             "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
             "index": 0
           }
         ]
@@ -196,11 +192,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c31a65e6-69d2-4eb2-8cd9-222399884e99",
+  "versionId": "ca0919a3-38a5-42f0-9cb6-f0ebde7ae394",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "b2e847aea1afbad20bc986fdcca4d73233c1a19e7b9e6c4bff5fd7fc4c14840c"
+    "instanceId": "fbac13493fa75c21e317fd0450e260009adc7e93d95112502ca2ddd0cbc86493"
   },
-  "id": "3XFT9lsaZhPFJBBR",
+  "id": "XhEc9fXhYW9iGru7",
   "tags": []
 }
