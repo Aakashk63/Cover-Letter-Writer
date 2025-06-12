@@ -1,204 +1,129 @@
 {
-  "name": "5",
   "nodes": [
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay",
+            "hour": 18,
+            "minute": 0
+          }
+        ]
+      },
+      "id": "1",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.cron",
       "typeVersion": 1,
       "position": [
-        0,
-        0
-      ],
-      "id": "ff45f247-5a0c-4cc0-9983-ba84b2437469",
-      "name": "When clicking ‘Execute workflow’"
+        200,
+        200
+      ]
     },
     {
       "parameters": {
-        "promptType": "define",
-        "text": "=Youre an ai agent youre role is to get the due unpaid detail with include daysoverdue,Amount,Due Amount,EmailID and Client Name\n\nHere is the data {{ $json.markdown }}",
-        "options": {}
+        "authentication": "oAuth2",
+        "sheetId": "YOUR_SHEET_ID",
+        "range": "MeetingNotes!A2:B",
+        "valueRenderMode": "FORMATTED_VALUE",
+        "dateTimeRenderOption": "FORMATTED_STRING"
       },
-      "type": "@n8n/n8n-nodes-langchain.agent",
+      "id": "2",
+      "name": "Read Meeting Notes",
+      "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 2,
       "position": [
-        660,
-        0
+        400,
+        200
       ],
-      "id": "630c8267-f9b1-4ca5-b119-6dc1bc58a139",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        580,
-        220
-      ],
-      "id": "5c09b5e7-dcbc-40e9-b723-6a49825943fd",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "XC6XiAxMYWlPVTpR",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit?gid=0#gid=0",
-          "mode": "url"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qCWS9w5ldq2jn25oPvdXRWnIOjPmOcrQZnaFYGe7sN4/edit#gid=0"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        220,
-        0
-      ],
-      "id": "39ab3eea-b1fd-47dd-8d70-a3a77a30d72f",
-      "name": "Google Sheets",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "0lT9mQW83ZU71ltb",
-          "name": "Google Sheets account"
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Google Sheets OAuth"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\n\nconst headers = Object.keys(items[0].json);\nconst headerRow = `| ${headers.join(' | ')} |`;\nconst separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;\n\nconst dataRows = items.map(item => {\n  return `| ${headers.map(h => item.json[h]).join(' | ')} |`;\n});\n\nconst markdownTable = [headerRow, separatorRow, ...dataRows].join('\\n');\n\nreturn [{ json: { markdown: markdownTable } }];"
+        "functionCode": "const actionRegex = /Task:\\s*(.+?),\\s*Assigned to:\\s*(\\S+@\\S+)/gi;\nconst results = [];\nfor (const item of items) {\n  const text = item.json.Notes;\n  let match;\n  while ((match = actionRegex.exec(text)) !== null) {\n    results.push({ json: { task: match[1], email: match[2] } });\n  }\n}\nreturn results;"
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "id": "3",
+      "name": "Extract Action Items",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
       "position": [
-        380,
-        0
-      ],
-      "id": "86649561-7186-48ad-8981-7e4193a1a6c5",
-      "name": "Code"
+        600,
+        200
+      ]
     },
     {
       "parameters": {
-        "text": "={{ $json.output }}",
-        "schemaType": "manual",
-        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"EmailID\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n      \"Client Name\": {\n\t\t\t\"type\": \"array\"\n\t\t},\n\t\t\"Due Amount\": {\n\t\t\t\"type\": \"array\",\n\t\t\t\"Days Overdue\": {\n\t\t\t\t\"type\": \"arrray\"\n\t\t\t}\n\t\t}\n\t}\n}",
-        "options": {}
+        "functionCode": "const grouped = {};\nfor (const item of items) {\n  const email = item.json.email;\n  if (!grouped[email]) grouped[email] = [];\n  grouped[email].push(item.json.task);\n}\nreturn Object.entries(grouped).map(([email, tasks]) => ({ json: { email, tasks } }));"
       },
-      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
-      "typeVersion": 1.1,
+      "id": "4",
+      "name": "Group by Person",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
       "position": [
-        1020,
-        0
-      ],
-      "id": "2ed513d1-7664-4c2c-bfb5-18b62837ee32",
-      "name": "Information Extractor"
+        800,
+        200
+      ]
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.output.EmailID[0] }}",
-        "subject": "=Payment Reminder – Overdue Invoices ",
-        "emailType": "text",
-        "message": "=Dear [{{ $json.output['Client Name'] }}],  I hope you are doing well.  This is a kind reminder that the following invoices from our records are overdue for payment as of June 11, 2025. We request your prompt attention to settle the outstanding amounts to avoid any interruptions in service or late fees.\n",
-        "options": {}
+        "fromEmail": "your-email@example.com",
+        "toEmail": "={{$json[\"email\"]}}",
+        "subject": "Post-Meeting Action Items",
+        "text": "Hello,\n\nHere are your action items from today\u2019s meeting:\n\n{{ $json[\"tasks\"].map((task, i) => (i+1) + '. ' + task).join('\\n') }}\n\nPlease ensure they are addressed.\n\nRegards,\nProject Team"
       },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
+      "id": "5",
+      "name": "Send Emails",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
       "position": [
-        1380,
-        0
-      ],
-      "id": "85e6429f-96b5-447d-bd09-e8f2213c4256",
-      "name": "Gmail",
-      "webhookId": "fbaa6cbe-b498-4056-bbb4-ada69478dd9a",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "6EipYDoa9oh6SUqc",
-          "name": "Gmail account"
-        }
-      }
+        1000,
+        200
+      ]
     }
   ],
-  "pinData": {},
   "connections": {
-    "When clicking ‘Execute workflow’": {
+    "Daily Trigger": {
       "main": [
         [
           {
-            "node": "Google Sheets",
+            "node": "Read Meeting Notes",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Information Extractor",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Sheets": {
+    "Read Meeting Notes": {
       "main": [
         [
           {
-            "node": "Code",
+            "node": "Extract Action Items",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Code": {
+    "Extract Action Items": {
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Group by Person",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent": {
+    "Group by Person": {
       "main": [
         [
           {
-            "node": "Information Extractor",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Information Extractor": {
-      "main": [
-        [
-          {
-            "node": "Gmail",
+            "node": "Send Emails",
             "type": "main",
             "index": 0
           }
@@ -207,14 +132,6 @@
     }
   },
   "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "versionId": "abc2a377-7b8d-4f89-8328-093f17c567a9",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "b2e847aea1afbad20bc986fdcca4d73233c1a19e7b9e6c4bff5fd7fc4c14840c"
-  },
-  "id": "PLDEYBAifRZKwzGO",
-  "tags": []
+  "settings": {},
+  "id": "post-meeting-action-tracker"
 }
